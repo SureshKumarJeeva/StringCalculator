@@ -1,15 +1,21 @@
-import http from "http";
+import express from "express";
+import path from "path";
 
-export const server = http.createServer(function(req, res){
-    res.writeHead(200, {'Content-type': "text/html"});
-    res.end(
-        //JSON.stringify("data: It works")
-        
-    );
+const app = express();
+
+app.get("/", (req, res)=>{
+    res.sendFile(path.join(__dirname, "index.html"));
 });
 
-server.listen(3000, ()=>{
-    console.log("Server running at https://localhost:3000");
+app.post("/api/add", (req, res)=>{
+    res.json([{
+        data:req.body
+    }]);
+});
+
+
+app.listen(8080, ()=>{
+    console.log("Server running at https://localhost:8080");
 });
 
 function add(numbers:String): Number{
