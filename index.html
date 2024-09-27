@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>String Calculator</title>
+    </head>
+    <body>
+        <form id="myForm">
+            <label for="string">String of numbers:</label>
+            <input type="text" id="string" name="string" />
+      
+            <input type="submit" value="Submit" />
+          </form>
+          <label for="" id="result"></label>
+    </body>
+    <script>
+        document.getElementById('myForm')
+                .addEventListener('submit', function (event) {
+                    event.preventDefault();
+      
+                    var formData = {
+                      numberstring: document.getElementById('string').value,
+                    };
+                    fetch('/api/add', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(formData),
+                    })
+                      .then((response) => response.json())
+                      .then((data) => {console.log(data[0].result); document.getElementById("result").innerHTML = data[0].result})
+                      .catch((error) => console.error('Error:', error));
+                  });
+      </script>
+</html>
