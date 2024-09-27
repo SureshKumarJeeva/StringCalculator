@@ -14,9 +14,14 @@ app.use(express.json());
 app.post("/api/add", (req, res)=>{
     let jsonData = JSON.parse(req.body);
     console.log(jsonData);
-    let result = add(jsonData.numberstring);
-    console.log(result);
-    res.json([{"result":result}]);
+    try{
+        let result = add(jsonData.numberstring);
+        console.log(result);
+        res.json([{"result":result}]);
+    }catch(e:unknown){
+        if(e instanceof Error)
+            res.json([{"result":e.message}]);
+    }
 });
 
 app.listen(8080, ()=>{
@@ -31,13 +36,13 @@ function add(numbers:String): Number{
     numbers = numbers.substring(0);
     console.log("numbers:"+numbers);
     if(numbers.substring(0,2) == "//"){
-        delimiter = numbers.substring(2,numbers.indexOf("\n"));
+        delimiter = numbers.substring(2,numbers.indexOf("\\n"));
         console.log("delimiter:"+delimiter);
-        numbers = numbers.substring(numbers.indexOf("\n") + 1);
+        numbers = numbers.substring(numbers.indexOf("\\n") + 2);
         console.log("numbers:"+numbers);
     }
     numbers.split(delimiter).forEach(element => {
-        let internalArray = element.split("\n");
+        let internalArray = element.split("\\n");
         internalArray.forEach(subelement =>{
             if(Number(subelement) < 0){
                 negativeNumbers.push(subelement);
